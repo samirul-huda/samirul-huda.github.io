@@ -335,11 +335,11 @@
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <form action="">
-                        <input type="text" placeholder="name" class="form-control rounded-0 mb-2">
-                        <input type="email" placeholder="email" class="form-control rounded-0 mb-2">
-                        <textarea name="body" id="body" cols="30" rows="3" placeholder="Message" class="form-control rounded-0 mb-3"></textarea>
-                        <button class="btn btn-orange w-100 rounded-0">Submit</button>
+                    <form action="" name="submit-to-google-sheet">
+                        <input type="text" placeholder="name" name="nama" class="form-control rounded-0 mb-2">
+                        <input type="email" placeholder="email" name="email" class="form-control rounded-0 mb-2">
+                        <textarea name="pesan" id="pesan" cols="30" rows="3" placeholder="Message" class="form-control rounded-0 mb-3"></textarea>
+                        <button class="btn btn-orange w-100 rounded-0" type="submit">Submit</button>
                     </form>
                 </div>
             </div>
@@ -420,5 +420,17 @@
             }
         });
       </script>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbygbxz-SMwjGUrpZ42QNg_zKq_mC9A5ov09AYjpEfKVlgTf1ubpZAePczmyXmo4IFkbgg/exec'
+        const form = document.forms['submit-to-google-sheet']
+    
+        form.addEventListener('submit', e => {
+        e.preventDefault()
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => console.log('Success!', response))
+            .catch(error => console.error('Error!', error.message))
+        })
+    </script>
 </body>
 </html>
