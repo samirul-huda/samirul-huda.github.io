@@ -309,6 +309,10 @@
     <!-- CONTACT -->
     <section class="portofolio-section" id="contact">
         <div class="container">
+            <div class="alert alert-success alert-dismissible fade show d-none alert-form" role="alert">
+                <strong>Thank you!</strong> We have received your message
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-6">
                     <p class="text-orange fw-semiblod">contact</p>
@@ -339,7 +343,11 @@
                         <input type="text" placeholder="name" name="nama" class="form-control rounded-0 mb-2">
                         <input type="email" placeholder="email" name="email" class="form-control rounded-0 mb-2">
                         <textarea name="pesan" id="pesan" cols="30" rows="3" placeholder="Message" class="form-control rounded-0 mb-3"></textarea>
-                        <button class="btn btn-orange w-100 rounded-0" type="submit">Submit</button>
+                        <button class="btn btn-orange w-100 rounded-0 btn-kirim" type="submit">Submit</button>
+                        <button class="btn btn-orange w-100 btn-loading d-none" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
                     </form>
                 </div>
             </div>
@@ -423,13 +431,30 @@
 
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbygbxz-SMwjGUrpZ42QNg_zKq_mC9A5ov09AYjpEfKVlgTf1ubpZAePczmyXmo4IFkbgg/exec'
-        const form = document.forms['submit-to-google-sheet']
+        const form = document.forms['submit-to-google-sheet'];
+
+        const btnKirim = document.querySelector('.btn-kirim');
+        const btnLoading = document.querySelector('.btn-loading');
+        const alertForm = document.querySelector('.alert-form');
     
         form.addEventListener('submit', e => {
-        e.preventDefault()
-        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => console.log('Success!', response))
-            .catch(error => console.error('Error!', error.message))
+            e.preventDefault();
+            // ketika tombol submit di klik
+            // tampilkan tombol loading, hilangkan tombol kirim
+            btnLoading.classList.toggle('d-none');
+            btnKirim.classList.toggle('d-none');
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => { 
+                    // tampilkan tombol kirim, hilangkan tombol loading
+                    btnLoading.classList.toggle('d-none');
+                    btnKirim.classList.toggle('d-none');
+                    // tampilkan alert
+                    alertForm.classList.toggle('d-none');
+                    // reset form
+                    form.reset();
+                    console.log('Success!', response) 
+                })
+                .catch(error => console.error('Error!', error.message))
         })
     </script>
 </body>
